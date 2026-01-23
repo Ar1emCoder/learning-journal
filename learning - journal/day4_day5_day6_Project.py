@@ -1,6 +1,6 @@
 def save_student_to_file(student, filename="PYTHON_2.0.txt"):
     # сохраняет данные студента в файл
-    with open (filename, 'w', encoding='utf-8') as f:
+    with open(filename, 'w', encoding='utf-8') as f:
         # w - write (записать), r - read (прочесть)
         f.write(f"Имя:{student['name']}\n")
         f.write(f"Возраст:{student['age']}\n")
@@ -8,6 +8,8 @@ def save_student_to_file(student, filename="PYTHON_2.0.txt"):
         f.write(f"Оценки:{','.join(map(str, student['grades']))}\n")
 
         print(f"Данные сохранены в {filename}")
+
+
 def load_from_file(filename="PYTHON_2.0.txt"):
     # загружает данные студента из файла
     student = {
@@ -19,10 +21,10 @@ def load_from_file(filename="PYTHON_2.0.txt"):
     # try и except - по типу if и else
     try:
         with open(filename, 'r', encoding='utf-8') as f:
-            lines = f.readlines() # читаем все строки
+            lines = f.readlines()  # читаем все строки
     except FileNotFoundError:
-            print('Файл не открывается, возникла ошибка')
-            return student
+        print('Файл не открывается, возникла ошибка')
+        return student
 
     for line in lines:
         line = line.strip()
@@ -36,16 +38,18 @@ def load_from_file(filename="PYTHON_2.0.txt"):
             if subjects_str:
                 student['subjects'] = subjects_str.split(',')
         elif line.startswith('Оценки:'):
-            grades_str = line.replace('Оценки:','').strip()
+            grades_str = line.replace('Оценки:', '').strip()
             if grades_str:
                 student['grades'] = [int(x) for x in grades_str.split(',')]
     print(f"Данные загружены из {filename}")
     return student
 
+
 def calculate_average(grades):
     if not grades:
         return 0
     return sum(grades) / len(grades)
+
 
 def get_status(average):
     if average >= 4.5:
@@ -56,6 +60,7 @@ def get_status(average):
         return "Удовлетворительно"
     else:
         return "Неуспевающий"
+
 
 def create_student():
     student = {
@@ -81,6 +86,7 @@ def create_student():
 
     print("Студент создан")
     return student
+
 
 def main():
     print("=== ПРОГРАММА 'СТУДЕНТ' ===")
@@ -116,7 +122,6 @@ def main():
             except ValueError:
                 print("Введите число!")
 
-
     average = calculate_average(student['grades'])
     status = get_status(average)
     print(f"Статус: {status}")
@@ -143,7 +148,7 @@ def main():
             print(f' {subject}: {grade}')
     else:
         print(" Нет предметов")
-    print("="*40)
+    print("=" * 40)
 
     if student['grades']:
         if len(student['subjects']) != len(student['grades']):
@@ -162,6 +167,7 @@ def main():
         print("Данные сохранены!")
 
     print("=== ПРОГРАММА ЗАВЕРШЕНА ===")
-    
+
+
 if __name__ == "__main__":
     main()
