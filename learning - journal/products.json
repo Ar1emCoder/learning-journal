@@ -6,12 +6,12 @@
   },
   {
     "name": "Potato",
-    "price": 120,
+    "price": 110,
     "type": "Овощи"
   },
   {
     "name": "Bread",
-    "price": 80,
+    "price": 30,
     "type": "Хлебобулочные изделия"
   },
   {
