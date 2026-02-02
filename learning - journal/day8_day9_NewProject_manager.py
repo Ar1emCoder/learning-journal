@@ -72,8 +72,8 @@ def search_by_price_range():
     while True:
         try:
             min_price = int(input("Введите начало диапазона: "))
-            if min_price <= 0:
-                print("Цена должна быть больше, чем 0!")
+            if min_price < 0:
+                print("Цена должна быть больше, чем 0 или равна 0!")
                 break
             else:
                 break
@@ -209,7 +209,7 @@ while True:
     print('9. Редактировать продукт')
     print('10. Продукты на ценовом диапазоне')
 
-    choice = input('Выберите действие (1-8): ')
+    choice = input('Выберите действие (1-10): ')
 
     if choice == '1':
         show_all()
