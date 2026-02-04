@@ -177,7 +177,7 @@ def search_by_name():
     search_names = input("Введите название для поиска: ").strip().lower()
     flag = False
     for product in products:
-        if product['name'] == search_names:
+        if product['name'].lower() == search_names:
             print(f"Найден продукт: {product['name']} - {product['price']} руб.")
             flag = True
     if not flag:
@@ -203,11 +203,11 @@ while True:
     print('4. Показать фрукты')
     print('5.1. Найти самый дешёвый продукт')
     print('5.2. Найти самый дорогой продукт')
-    print('6. Выйти')
-    print('7. Поиск по названию')
-    print('8. Удалить продукт')
-    print('9. Редактировать продукт')
-    print('10. Продукты на ценовом диапазоне')
+    print('6. Поиск по названию')
+    print('7. Удалить продукт')
+    print('8. Редактировать продукт')
+    print('9. Продукты на ценовом диапазоне')
+    print('10. Выйти')
 
     choice = input('Выберите действие (1-10): ')
 
@@ -224,16 +224,16 @@ while True:
     elif choice == '5.2':
         find_expensive()
     elif choice == '6':
+        search_by_name()
+    elif choice == '7':
+        remove_product()
+    elif choice == '8':
+        edit_product()
+    elif choice == '9':
+        search_by_price_range()
+    elif choice == '10':
         save_products(products)
         print("Выход из программы")
         break
-    elif choice == '7':
-        search_by_name()
-    elif choice == '8':
-        remove_product()
-    elif choice == '9':
-        edit_product()
-    elif choice == '10':
-        search_by_price_range()
     else:
         print("Неверный выбор! Введите число от 1 до 10")
