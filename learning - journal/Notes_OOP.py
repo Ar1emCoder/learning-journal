@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-from json import JSONDecodeError
 
 class Note:
     def __init__(self, title, content, tags):
@@ -9,13 +8,13 @@ class Note:
         self.tags = tags
         self.id = None
         self.created_at = datetime.now()
-        self.update_at = None
+        self.updated_at = None
 
-    def update(self, new_title=None, new_content=None, new_tags=None):
+    def updated(self, new_title=None, new_content=None, new_tags=None):
         if new_title: self.title = new_title
         if new_content: self.content = new_content
         if new_tags: self.tags = new_tags
-        self.update_at = datetime.now()
+        self.updated_at = datetime.now()
         print(f"Данные изменены на: {self.title} - c тегом [{self.tags}]")
 
     def get_preview(self, length=50):
@@ -46,69 +45,80 @@ class NotesManager:
         return False
 
     def save(self):
-        print('временно не работает')
-        # # Для одной заметки
-        # note_dict = {
-        #     "id": note.id,
-        #     "title": note.title,
-        #     "content": note.content,
-        #     "tags": note.tags,
-        #     "created_at": note.created_at,
-        #     "updated_at": note.update_at
-        # }
-        # # Для всех заметок
-        # notes_data = []
-        # for note in self.notes:
-        #     note_dict = {...}
-        #     notes_data.append(note_dict)
-        #
-        # with open(self.filename, 'w', encoding = 'utf-8') as f:
-        #     json.dump(notes_data, f, ensure_ascii=False, indent=2)
+        try:
+            data = []
+            for note in self.notes:
+                # Для одной заметки
+                note_dict = {
+                    "id": note.id,
+                    "title": note.title,
+                    "content": note.content,
+                    "tags": note.tags,
+                    "created_at": note.created_at.isoformat(),  # ← СТРОКА
+                    "updated_at": note.updated_at.isoformat() if note.updated_at else None  # ← СТРОКА или None
+                }
+                data.append(note_dict)
+
+            with open(self.filename, 'w', encoding = 'utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            print(f"Сохранено {len(data)} заметок")
+        except Exception as e:
+            print(f"Ошибка сохранения: {e}")
 
     def load(self):
-        print('пока не работает')
-        self.notes = []
-        # try:
-        #     with open(self.filename, 'r', encoding='utf-8') as f:
-        #         data = json.load(f)
-        # except FileNotFoundError:
-        #     print(f"Файл {self.filename} не найден, начинаем с чистого листа")
-        # except JSONDecodeError:
-        #     print(f"Файл {self.filename} повреждён")
-        #     return
-        #
-        # for note_data in data:
-        #     note_data = Note(
-        #         title=note_data['title'],
-        #         content=note_data['content'],
-        #         tags= note_data['tags']
-        #     )
-        #     note.id = note_data['id']
-        #     note.created_at = note_data['created_at']
-        #     self.notes.append(note)
-        #
-        # if self.notes:
-        #     self.next_id = max(note.id for note in self.notes) + 1
-        # else:
-        #     self.next_id = 1
+        try:
+            with open(self.filename, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            self.notes = []
+            for note_data in data:
+                note = Note(
+                    title=note_data['title'],
+                    content=note_data['content'],
+                    tags=note_data['tags']
+                )
+                note.id = note_data['id']
+                note.created_at = datetime.fromisoformat(note_data['created_at'])
+                if note_data.get('updated_at'):
+                    note.updated_at = datetime.fromisoformat(note_data['updated_at'])
+                self.notes.append(note)
+
+            if self.notes:
+                self.next_id = max(note.id for note in self.notes) + 1
+            else:
+                self.next_id = 1
+
+            print(f"Загружено {len(self.notes)} заметок")
+
+        except FileNotFoundError:
+            print(f"Файл {self.filename} не найден, создаём новый")
+            self.notes = []
+            self.next_id = 1
+        except json.JSONDecodeError:
+            print(f"Файл {self.filename} повреждён, начинаем с чистого листа")
+            self.notes = []
+            self.next_id = 1
+
 
 if __name__ == "__main__":
+    print("=== ТЕСТ 1: СОЗДАНИЕ И СОХРАНЕНИЕ ===")
     manager = NotesManager()
-    # добавление
     manager.add_note("Тест", "Это тестовая заметка", ["тест", "пример"])
+    manager.add_note("Вторая", "Ещё одна заметка", ["важно"])
 
-    print(f"Заметок: {len(manager.notes)}")
-    if manager.notes:
-        note = manager.notes[0]
+    print(f"Заметок в памяти: {len(manager.notes)}")
+
+    print("\n=== ТЕСТ 2: ЗАГРУЗКА ===")
+    manager2 = NotesManager()
+    print(f"Загружено заметок: {len(manager2.notes)}")
+
+    if manager2.notes:
+        note = manager2.notes[0]
         print(f"Первая заметка: {note.title}")
-        print(f"Preview: {note.get_preview()}")
+        print(f"Preview: {note.get_preview(20)}")
+        print(f"Создана: {note.created_at}")
 
-    # удаление
-    if manager.notes:
-        manager.delete_note(manager.notes[0].id)
-        print(f"После удаления: {len(manager.notes)} заметок")
-
-
-
-
-
+    print("\n=== ТЕСТ 3: УДАЛЕНИЕ ===")
+    if manager2.notes:
+        manager2.delete_note(manager2.notes[0].id)
+        print(f"После удаления: {len(manager2.notes)} заметок")
