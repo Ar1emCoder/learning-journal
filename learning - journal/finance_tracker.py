@@ -1,4 +1,8 @@
+import json
 from datetime import datetime
+
+from unicodedata import category
+
 
 class Transaction:
     def __init__(self, amount, category, description, type):
@@ -21,7 +25,7 @@ class FinanceManager:
         transaction.id = self.next_id
         self.transactions.append(transaction)
         self.next_id += 1
-        # self.save()
+        self.save()
 
     def get_balance(self):
         balance = 0
@@ -41,6 +45,41 @@ class FinanceManager:
             type_rus = "Доход" if transaction.type == "income" else "Расход"
             print(f"[{transaction.id}] {transaction.amount} руб. | {type_rus} | Категория: {transaction.category}")
         print("-"*40)
+
+    def save(self):
+        try:
+            data = []
+            for transaction in self.transactions:
+                data_dict = {
+                    "id": transaction.id,
+                    "amount": transaction.amount,
+                    "category": transaction.category,
+                    "description": transaction.description,
+                    "date": transaction.data.isoformat(), # превращаем дату в строку
+                    "type": transaction.type
+                }
+                data.append(data_dict)
+            with open(self.filename, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            print(f"Сохранено в {self.filename}. Всего: {len(data)} транзакций")
+        except Exception as e:
+            print(f"Ошибка сохранения: {e}")
+
+    def load(self):
+        try:
+            with open(self.filename, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            self.data = []
+            for transaction_data in data:
+                Data = data(
+                    id = data['id'],
+                    amount = data['amount'],
+                    category = data['category'],
+                    description = data['description'],
+                    date = data['date'],
+                    type = data['type']
+                )
+
 
 if __name__ == "__main__":
     fm = FinanceManager()
