@@ -18,7 +18,7 @@ class FinanceManager:
         self.next_id = 1
         self.filename = filename
         self.transactions = []
-        # self.load()
+        self.load()
 
     def add_transaction(self, amount, category, description, type):
         transaction = Transaction(amount, category, description, type)
@@ -69,16 +69,29 @@ class FinanceManager:
         try:
             with open(self.filename, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            self.data = []
-            for transaction_data in data:
-                Data = data(
-                    id = data['id'],
-                    amount = data['amount'],
-                    category = data['category'],
-                    description = data['description'],
-                    date = data['date'],
-                    type = data['type']
+            self.transactions = []
+            for item in data:
+                transaction = Transaction(
+                    amount = item['amount'],
+                    category = item['category'],
+                    description = item['description'],
+                    type = item['type']
                 )
+                transaction.id = item['id']
+                transaction.data = datetime.fromisoformat(item['data'])
+                self.transactions.append(transaction)
+
+            if self.transactions:
+                self.next_id = max(t.id for t in self.transactions) + 1
+            else:
+                self.next_id = 1
+            print(f"Загружено {len(self.transactions)} транзакций")
+        except FileNotFoundError:
+            print("Файл не найден, начинаем с начала!")
+            self.transactions = []
+            self.next_id = 1
+        except Exception as e:
+            print(f"Ошибка загрузки: {e}")
 
 
 if __name__ == "__main__":
