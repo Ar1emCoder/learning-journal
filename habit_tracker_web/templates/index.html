@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habit Tracker</title>
+</head>
+<body>
+    <h1>Мои привычки</h1>
+
+    {% if habits %}
+        <ul>
+        {% for habit in habits %}
+            <li>
+                <strong>{{ habit.name }}</strong><br>
+                Streak: {{ habit.streak }} дней<br>
+                Последнее выполнение: {{ habit.last_completed }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>У тебя пока нет привычек. Добавь первую!</p>
+    {% endif %}
+</body>
+</html>
