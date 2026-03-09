@@ -6,6 +6,12 @@
 <body>
     <h1>Мои привычки</h1>
 
+    <h2>Новая привычка</h2>
+                <form action="/add" method="post">
+                    <input type="text" name="name" placeholder="Название" required>
+                    <botton type="submit">Добавить</botton>
+                </form>
+    <h2>Список привычек</h2>
     {% if habits %}
         <ul>
         {% for habit in habits %}
@@ -13,6 +19,12 @@
                 <strong>{{ habit.name }}</strong><br>
                 Streak: {{ habit.streak }} дней<br>
                 Последнее выполнение: {{ habit.last_completed }}
+                <form action="/complete/{{ habit.id }}" method="post">
+                    <button type="submit"> Выполнено</button>
+                </form>
+                <form action="/delete/{{ habit.id }}" method="post" style="display: inline;">
+                    <button type="submit" onclick="return confirm('Точно удалить?)">Удалить</button>
+                </form>
             </li>
         {% endfor %}
         </ul>
