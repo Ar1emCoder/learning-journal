@@ -2,8 +2,10 @@ import json
 import os
 from flask import Flask, render_template, url_for, redirect, request
 from datetime import date, datetime, timedelta
+from database import get_all_habits, init_bd, add_habit_to_db
 
 app = Flask(__name__)
+init_bd()
 
 # Указываем полный путь к файлу
 JSON_PATH = os.path.join(os.path.dirname(__file__), 'habit_tracker.json')
@@ -24,14 +26,14 @@ def save_habits(habits):
 @app.route('/')
 def index():
     """Главная страница со списком привычек"""
-    habits = load_habits()
+    habits = get_all_habits()
     return render_template('index.html', habits=habits)
 
 
 @app.route('/complete/<int:habit_id>', methods=['POST'])
 def complete(habit_id):
     """Отмечает привычку как выполненную"""
-    habits = load_habits()
+    habits = get_all_habits()
 
     # Ищем привычку по id, а не по индексу
     for habit in habits:
@@ -63,28 +65,31 @@ def complete(habit_id):
 @app.route('/add', methods=['POST'])
 def add():
     name = request.form['name']
-    habits = load_habits()
-    existing_ids = [habit['id'] for habit in habits]
-    if existing_ids:
-        new_id = max(existing_ids) + 1
-    else:
-        new_id = 1
-    today = date.today().isoformat()
-    new_habit = {
-        'id': new_id,
-        'name': name,
-        'streak': 0,
-        'last_completed': today
-    }
-    habits.append(new_habit)
-    save_habits(habits)
-    return redirect(url_for('index')) # перенаправить на главную
+
+    add_habit_to_db()
+
+    return redirect(url_for('index'))
+    # name = request.form['name']
+    # habits = get_all_habits()
+    # existing_ids = [habit['id'] for habit in habits]
+    # if existing_ids:
+    #     new_id = max(existing_ids) + 1
+    # else:
+    #     new_id = 1
+    # today = date.today().isoformat()
+    # new_habit = {
+    #     'id': new_id,
+    #     'name': name,
+    #     'streak': 0,
+    #     'last_completed': today
+    # }
+    # habits.append(new_habit)
+    # save_habits(habits)
+    # return redirect(url_for('index')) # перенаправить на главную
 
 @app.route('/delete/<int:habit_id>', methods=['POST'])
 def delete(habit_id):
-    habits = load_habits()
-    # for habit in habits:
-    #     if habit.get('id') == habit_id:
+    habits = get_all_habits()
     for i, habit in enumerate(habits):
         if habit['id'] == habit_id:
             del habits[i]

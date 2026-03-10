@@ -1,0 +1,141 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    border-bottom: 3px solid #4CAF50;
+    padding-bottom: 10px;
+}
+
+h2 {
+    color: #555;
+    margin-top: 30px;
+}
+
+/* Форма добавления */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Список привычек */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.habit-info {
+    flex-grow: 1;
+}
+
+.habit-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.habit-streak {
+    color: #4CAF50;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.habit-date {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Кнопки действий */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.complete-btn {
+    background-color: #2196F3;
+}
+
+.complete-btn:hover {
+    background-color: #0b7dda;
+}
+
+.delete-btn {
+    background-color: #f44336;
+}
+
+.delete-btn:hover {
+    background-color: #da190b;
+}
+
+/* Статистика */
+.stats {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.stat-item {
+    font-size: 18px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #4CAF50;
+    display: block;
+}
+
+.empty-state {
+    text-align: center;
+    color: #777;
+    padding: 40px;
+    font-size: 18px;
+}
