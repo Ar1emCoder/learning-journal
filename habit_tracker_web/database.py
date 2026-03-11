@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import date
 
-DB_PATH = 'habits.bd'
+DB_PATH = 'habits.db'
 
 def get_all_habits():
     ''' Возвращает список всех привычек из БД '''
@@ -52,6 +52,24 @@ def init_bd():
     conn.commit()
     conn.close()
     print('База данных готова!')
+
+def update_habit_in_db(habit_id, new_streak, new_date):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE habits SET streak = ?, last_completed = ? WHERE id = ?",
+                   (new_streak, new_date, habit_id))
+    conn.commit()
+    conn.close()
+
+
+def delete_habit_from_db(habit_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM habits WHERE id = ?",
+                   (habit_id,))
+    conn.commit()
+    conn.close()
 
 if __name__ == '__main__':
     init_bd()
