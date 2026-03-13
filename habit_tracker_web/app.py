@@ -7,8 +7,6 @@ from database import get_all_habits, init_bd, add_habit_to_db, update_habit_in_d
 app = Flask(__name__)
 init_bd()
 
-# Указываем полный путь к файлу
-# JSON_PATH = os.path.join(os.path.dirname(__file__), 'habit_tracker.json')
 
 # def load_habits():
 #     """Загружает привычки из JSON файла"""
