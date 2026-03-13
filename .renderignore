@@ -1,0 +1,6 @@
+habit_tracker.py
+habit_tracker/
+habit_tracker.json
+pycache/
+*.pyc
+*.db
