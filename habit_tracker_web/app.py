@@ -3,6 +3,9 @@
 from flask import Flask, render_template, url_for, redirect, request
 from datetime import date, datetime, timedelta
 from database import get_all_habits, init_bd, add_habit_to_db, update_habit_in_db, delete_habit_from_db
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
 
 app = Flask(__name__)
 init_bd()
