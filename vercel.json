@@ -1,0 +1,14 @@
+{
+    "builds": [
+        {
+            "src": "habit_tracker_web/app.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "habit_tracker_web/app.py"
+        }
+    ]
+}
