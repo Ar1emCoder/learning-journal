@@ -24,6 +24,31 @@ async def echo(message: types.Message):
         await message.answer(
             "Я бот, меня написал начинающий программист - Ar1emCoder"
         )
+    elif ',' in message.text:
+        products = []
+        for p in message.text.split(','):
+            clean = p.strip().lower()
+            products.append(clean)
+        found = find_recipes(products)
+
+        if found:
+            answer = "Можно приготовить:\n\n"
+            for r in found:
+                answer += f"- {r['name']}\n"
+            answer += "\nНапиши название рецепта, чтобы увидеть инструкцию."
+        else:
+            answer = "Ничего не нашёл. Попробуйте другие продукты или добавь ещё."
+
+        await message.answer(answer)
+    elif message.text == '/babushka':
+        babushka_recipes = get_babushka_recipes()
+        if babushka_recipes:
+            answer = "👵 Бабушкины рецепты:\n\n"
+            for r in babushka_recipes:
+                answer += f"• {r['name']}\n"
+            await message.answer(answer)
+        else:
+            await message.answer('👵 Пока нет бабушкиных рецептов. Добавлю скоро!')
     else:
         await message.answer(f"Ты написал: {message.text}")
 
@@ -33,4 +58,4 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    asyncio.run(main())rm bot_old.py
