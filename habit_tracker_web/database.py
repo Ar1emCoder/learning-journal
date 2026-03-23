@@ -71,6 +71,26 @@ def delete_habit_from_db(habit_id):
     conn.commit()
     conn.close()
 
+def get_stats():
+    habits = get_all_habits()
+    cnt_habit = len(habits)
+    summa_streak = 0
+    max_streak = 0
+    max_habit_streak = None
+    for habit in habits:
+        summa_streak += habit['streak']
+        if max_streak < habit['streak']:
+            max_streak = habit['streak']
+            max_habit_streak = habit['name']
+
+    return {
+        'total_habits': cnt_habit,
+        'total_streak': summa_streak,
+        'best_streak': max_streak,
+        'best_habit': max_habit_streak
+    }
+
+
 if __name__ == '__main__':
     init_bd()
     print(get_all_habits())

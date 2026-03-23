@@ -8,22 +8,22 @@
     <div class="container">
     <h1>📊 Habit Tracker</h1>
 
-    <!-- Статистика (сюда потом добавим) -->
+    <!-- Статистика -->
     <div class="stats" id="stats">
         <div class="stat-item">
-            <span class="stat-value" id="total-habits">{{ habits|length }}</span>
+            <span class="stat-value">{{ stats.total_habits }}</span>
             <br>Всего привычек
         </div>
         <div class="stat-item">
-            <span class="stat-value" id="total-streak">
-                {% set total = 0 %}
-                {% for habit in habits %}
-                    {% set total = total + habit.streak %}
-                {% endfor %}
-                {{ total }}
-            </span>
+            <span class="stat-value">{{ stats.total_streak }}</span>
             <br>Всего дней
         </div>
+        {% if stats.best_habit %}
+        <div class="stat-item">
+            <span class="stat-value">{{ stats.best_habit }}</span>
+            <br>🔥 {{ stats.best_streak }} дней
+        </div>
+        {% endif %}
     </div>
 
     <!-- Форма добавления -->

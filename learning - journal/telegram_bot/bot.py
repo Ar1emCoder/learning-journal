@@ -1,6 +1,6 @@
 import asyncio
 from aiogram import Bot, Dispatcher, types
-from recipes import find_recipes, get_babushka_recipes
+from recipes import find_recipes, get_babushka_recipes, recipes
 
 # Вставь свой токен
 API_TOKEN = '8428805523:AAHFD5N7ePL98q9Fjuc-RgBWf0x7TeP79DI'
@@ -49,6 +49,17 @@ async def echo(message: types.Message):
             await message.answer(answer)
         else:
             await message.answer('👵 Пока нет бабушкиных рецептов. Добавлю скоро!')
+    elif not message.text.startswith('/') and ',' not in message.text:
+        found_recipe = None
+        for r in recipes:
+            if r['name'].lower() == message.text.strip().lower():
+                found_recipe = r
+                break
+
+        if found_recipe:
+            await message.answer(found_recipe['instructions'])
+        else:
+            await message.answer("Рецепт не найден. Попробуй другое название или напиши продукты через запятую")
     else:
         await message.answer(f"Ты написал: {message.text}")
 
@@ -58,4 +69,4 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    asyncio.run(main())rm bot_old.py
+    asyncio.run(main())
