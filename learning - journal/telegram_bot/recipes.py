@@ -1,5 +1,4 @@
 # База рецептов
-from zoneinfo import available_timezones
 
 recipes = [
     {
