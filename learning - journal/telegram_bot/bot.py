@@ -1,6 +1,7 @@
 import asyncio
 from aiogram import Bot, Dispatcher, types
-from recipes import find_recipes, get_babushka_recipes, recipes
+from recipes import get_babushka_recipes, recipes
+from database import find_recipes_in_db
 
 # Вставь свой токен
 API_TOKEN = '8428805523:AAHFD5N7ePL98q9Fjuc-RgBWf0x7TeP79DI'
@@ -29,7 +30,7 @@ async def echo(message: types.Message):
         for p in message.text.split(','):
             clean = p.strip().lower()
             products.append(clean)
-        found = find_recipes(products)
+        found = find_recipes_in_db(products)
 
         if found:
             answer = "Можно приготовить:\n\n"
