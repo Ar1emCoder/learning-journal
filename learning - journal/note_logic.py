@@ -11,3 +11,10 @@ def toggle_done(notes, note_id):
         if n['id'] == note_id:
             n['done'] = not n['done']
         return notes
+
+def search_notes(notes, keyword):
+    result = []
+    for n in notes:
+        if keyword.lower() in n['text'].lower():
+            result.append(n)
+    return result
