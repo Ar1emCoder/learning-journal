@@ -1,6 +1,9 @@
+from datetime import datetime
+
 def add_note(notes, text):
     new_id = max((n['id'] for n in notes), default=0) + 1
-    notes.append({'id': new_id, 'text': text, 'done': False})
+    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    notes.append({'id': new_id, 'text': text, 'done': False, 'created_at': created_at})
     return notes
 
 def delete_note(notes, note_id):
@@ -18,3 +21,6 @@ def search_notes(notes, keyword):
         if keyword.lower() in n['text'].lower():
             result.append(n)
     return result
+
+def sort_notes_by_date(notes, reverse=False): # True - новые сверху, False - старые сверху
+    return sorted(notes, key=lambda x: x['created_at'], reverse=reverse)

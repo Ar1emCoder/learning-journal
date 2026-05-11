@@ -1,5 +1,5 @@
 from note_storage import load_notes, save_notes
-from note_logic import add_note, delete_note, toggle_done, search_notes
+from note_logic import add_note, delete_note, toggle_done, search_notes, sort_notes_by_date
 
 def main():
     notes = load_notes()
@@ -10,10 +10,18 @@ def main():
         print("3. Удалить заметку")
         print("4. Отметить выполненной")
         print("5. Найти заметку по 'особенному' слову")
-        print("6. Выйти")
+        print("6. Показать заметки (новые -> старые)")
+        print("7. Показать заметки (старые -> новые)")
+        print("8. Выйти")
         choice = input("Выберите действие: ").strip()
         if choice == "1":
-            add_note(notes)
+            if choice == "1":
+                text = input("Текст заметки: ").strip()
+                if text:
+                    notes = add_note(notes, text)  # ← теперь передаём text
+                    save_notes(notes)
+                else:
+                    print("Текст не может быть пустым")
         elif choice == "2":
             for n in notes:
                 status = "✓" if n["done"] else "◻"
@@ -33,6 +41,16 @@ def main():
                     status = "✓" if n["done"] else "◻"
                     print(f"{n['id']}. [{status}] {n['text']}")
         elif choice == "6":
+            sorted_notes= sort_notes_by_date(notes, reverse=True)
+            for n in sorted_notes:
+                status = "✓" if n["done"] else "◻"
+                print(f"{n['id']}. [{status}] {n['text']}  [{n['created_at']}]")
+        elif choice == "7":
+            sorted_notes = sort_notes_by_date(notes, reverse=False)
+            for n in sorted_notes:
+                status = "✓" if n["done"] else "◻"
+                print(f"{n['id']}. [{status}] {n['text']}  [{n['created_at']}]")
+        elif choice == "8":
             print("👋 До встречи!")
             break
         else:
