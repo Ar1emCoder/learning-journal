@@ -26,6 +26,8 @@ def main():
             for n in notes:
                 status = "✓" if n["done"] else "◻"
                 print(f"{n['id']}. [{status}] {n['text']}")
+                tags_str = ", ".join(n["tags"]) if n["tags"] else "без тегов"
+                print(f"   Теги: {tags_str}")
         elif choice == "3":
             delete_note(notes)
         elif choice == "4":

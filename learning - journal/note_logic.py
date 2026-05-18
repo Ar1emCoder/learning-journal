@@ -3,7 +3,13 @@ from datetime import datetime
 def add_note(notes, text):
     new_id = max((n['id'] for n in notes), default=0) + 1
     created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    notes.append({'id': new_id, 'text': text, 'done': False, 'created_at': created_at})
+    tags = []
+    text_tags = input('Введите теги (через запятую) -> Enter (если не хотите): ').strip()
+    if text_tags:
+        tags = [t.strip().lower() for t in text_tags.split(",")]
+    else:
+        tags = []
+    notes.append({'id': new_id, 'text': text, 'done': False, 'created_at': created_at, 'tags': tags})
     return notes
 
 def delete_note(notes, note_id):
