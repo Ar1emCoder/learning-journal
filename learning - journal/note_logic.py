@@ -19,7 +19,7 @@ def toggle_done(notes, note_id):
     for n in notes:
         if n['id'] == note_id:
             n['done'] = not n['done']
-        return notes
+    return notes
 
 def search_notes(notes, keyword):
     result = []
@@ -27,6 +27,15 @@ def search_notes(notes, keyword):
         if keyword.lower() in n['text'].lower():
             result.append(n)
     return result
+
+def search_by_tag(notes, tag):
+    result = []
+    for n in notes:
+        lower_tags = [t.lower() for t in n['tags']]
+        if tag.lower() in lower_tags:
+            result.append(n)
+    return result
+
 
 def sort_notes_by_date(notes, reverse=False): # True - новые сверху, False - старые сверху
     return sorted(notes, key=lambda x: x['created_at'], reverse=reverse)
