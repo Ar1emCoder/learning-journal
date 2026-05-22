@@ -1,3 +1,6 @@
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Flask](https://img.shields.io/badge/Flask-2.3.3-green)
+![SQLite](https://img.shields.io/badge/SQLite-3-blue)
 # 🐍 Python Learning Journey
 
 **Студент 1 курса (2026) → Python Developer к выпуску (2029)**
