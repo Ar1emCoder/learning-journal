@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "amount": 1000,
+    "category": "work",
+    "description": "pay",
+    "date": "2026-02-22T22:36:30.596861",
+    "type": "income"
+  },
+  {
+    "id": 2,
+    "amount": 200,
+    "category": "eat",
+    "description": "products",
+    "date": "2026-02-22T22:36:30.604808",
+    "type": "expense"
+  }
+]
