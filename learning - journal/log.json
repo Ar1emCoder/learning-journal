@@ -1,0 +1,10 @@
+{
+    "function": "add",
+    "args": [
+        3,
+        5
+    ],
+    "kwargs": {},
+    "result": 8,
+    "timestamp": 1779546696.5580373
+}
