@@ -7,4 +7,58 @@
     "kwargs": {},
     "result": 8,
     "timestamp": 1779546696.5580373
+}{
+    "function": "add",
+    "args": [
+        3,
+        5
+    ],
+    "kwargs": {},
+    "result": 8,
+    "timestamp": 1780683516.175645
+}{
+    "function": "add",
+    "args": [
+        3,
+        5
+    ],
+    "kwargs": {},
+    "result": 8,
+    "timestamp": 1780683583.801389
+}{
+    "function": "add",
+    "args": [
+        3,
+        5
+    ],
+    "kwargs": {},
+    "result": 8,
+    "timestamp": 1780683619.4252183
+}{
+    "function": "add",
+    "args": [
+        3,
+        5
+    ],
+    "kwargs": {},
+    "result": 8,
+    "timestamp": 1780683639.8463132
+}{
+    "function": "add",
+    "args": [
+        3,
+        5
+    ],
+    "kwargs": {},
+    "result": 8,
+    "timestamp": 1780683639.9818885
+}{
+    "function": "add",
+    "args": [
+        3,
+        5
+    ],
+    "kwargs": {},
+    "result": 8,
+    "timestamp": 1780683732.8020394
 }
