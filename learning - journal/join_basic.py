@@ -57,17 +57,19 @@
 # conn.close()
 #
 # # 4 - Задача: найти пользователей, у которых сумма расходов выше средней по всем пользователям
-WITH user_totals AS (
-    -- Здесь идёт обычный SELECT, который создаёт таблицу
-    SELECT
-        u.username,
-        SUM(t.amount) as total_spent
-    FROM transactions t
-    INNER JOIN users u ON t.user_id = u.id
-    WHERE t.transaction_type = 'expense'
-    GROUP BY u.username
-)
--- А здесь ты используешь эту временную таблицу
-SELECT username, total_spent
-FROM user_totals
-WHERE total_spent > (SELECT AVG(total_spent) FROM user_totals)
+qwery1 = '''
+    WITH user_totals AS (
+        -- Здесь идёт обычный SELECT, который создаёт таблицу
+        SELECT
+            u.username,
+            SUM(t.amount) as total_spent
+        FROM transactions t
+        INNER JOIN users u ON t.user_id = u.id
+        WHERE t.transaction_type = 'expense'
+        GROUP BY u.username
+        )
+    -- А здесь ты используешь эту временную таблицу
+    SELECT username, total_spent
+    FROM user_totals
+    WHERE total_spent > (SELECT AVG(total_spent) FROM user_totals)
+'''
