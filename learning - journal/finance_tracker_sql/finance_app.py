@@ -122,7 +122,6 @@ def add_transaction(user_id, category_id, amount, type):
     conn.commit()
 
     print(f"✅ Транзакция добавлена: пользователь {user_id}, категория {category_id}, сумма {amount}, тип {type}")
-
     conn.close()
 
 
