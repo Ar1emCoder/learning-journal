@@ -1,8 +1,20 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from database import create_user, get_user_by_id, get_all_users
+import time
 
 app = FastAPI()
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    print(f"{request.method} {request.url.path}")
+
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    print(f"{request.method} {request.url.path} - {response.status_code} ({process_time} сек)")
+
+    return response
 
 class User(BaseModel):
     username: str
