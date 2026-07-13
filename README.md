@@ -92,7 +92,7 @@
 
 - [x] Изучить цикл событий, корутины
 - [x] Пройти туториал FastAPI, освоить Pydantic (вложенные модели, валидаторы)
-- [ ] Изучить `databases` или `asyncpg`
+- [x] Изучить (`databases` или `asyncpg`) и `aiosqlite`
 - [ ] **Middleware** — написать свой для логирования запросов
 - [ ] **BackgroundTasks** — встроенный механизм FastAPI для фоновых задач
 - [ ] **Валидация на уровне БД** — NOT NULL, UNIQUE, CHECK, FOREIGN KEY (не полагаться только на Pydantic)
