@@ -94,7 +94,7 @@
 - [x] Пройти туториал FastAPI, освоить Pydantic (вложенные модели, валидаторы)
 - [x] Изучить (`databases` или `asyncpg`) и `aiosqlite`
 - [x] **Middleware** — написать свой для логирования запросов
-- [ ] **BackgroundTasks** — встроенный механизм FastAPI для фоновых задач
+- ✅ **BackgroundTasks** — встроенный механизм FastAPI для фоновых задач
 - [ ] **Валидация на уровне БД** — NOT NULL, UNIQUE, CHECK, FOREIGN KEY (не полагаться только на Pydantic)
 - [ ] **Проект:** `Каталог фильмов` (REST API)
   - CRUD для `Фильм` и `Жанр` (многие-ко-многим)
