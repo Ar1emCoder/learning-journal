@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from pydantic import BaseModel
 from database import create_user, get_user_by_id, get_all_users
 import time
@@ -26,8 +26,9 @@ async def root():
     return {"message": "Сервер работает с SQLite!"}
 
 @app.post("/users")
-async def create_user_endpoint(user: User):
+async def create_user_endpoint(user: User, background_tasks: BackgroundTasks):
     ans = await create_user(user.username, user.email, user.age)
+    background_tasks.add_task(send_welcome_email, user.username, user.email)
     return ans
 
 @app.get("/users")
@@ -42,3 +43,8 @@ async def get_user(user_id: int):
         raise HTTPException(status_code=404, detail="Пользователь не найден!")
     else:
         return ans
+
+# Функция фоновой задачи
+def send_welcome_email(username: str, email: str):
+    time.sleep(2)
+    print(f"[ФОН] Письмо отправлено пользователю {username} на {email}")
