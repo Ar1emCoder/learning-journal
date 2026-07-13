@@ -1,29 +1,32 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from database import create_user, get_user_by_id, get_all_users
 
 app = FastAPI()
-# Словарь для хранения пользователей
-users_db: dict[int, User] = {} # id -> User
-user_id_counter = 1
 
 class User(BaseModel):
     username: str
     email: str
     age: int | None = None
---------------------------!!!---Над логикой сохранения подумать
-@app.post("/users")
-async def create_user(user: User):
-    return {
-        "message": f"Пользователь {user.username} создан. Его ID: {user_id_counter}!",
-        "user": user
-    }
-user_id_counter += 1
-
 
 @app.get("/")
 async def root():
-    return {"message": "Сервер работает! Открой /docs для тестирования"}
----------------------------------------------!!!----------------Дописать, чтоб всех пользователей выводил из БД
+    return {"message": "Сервер работает с SQLite!"}
+
+@app.post("/users")
+async def create_user_endpoint(user: User):
+    ans = await create_user(user.username, user.email, user.age)
+    return ans
+
+@app.get("/users")
+async def get_users():
+    ans = await get_all_users()
+    return ans
+
 @app.get("/users/{user_id}")
 async def get_user(user_id: int):
-    return {"user_id": user_id, "username": "Тестовый пользователь"}
+    ans = await get_user_by_id(user_id)
+    if ans is None:
+        raise HTTPException(status_code=404, detail="Пользователь не найден!")
+    else:
+        return ans
