@@ -52,6 +52,16 @@
 - ✅ Хранение в SQLite
 - ✅ Адаптивный интерфейс (CSS)
 
+### 6. 🎬 Movie Catalog API (FastAPI + Async SQLite)
+**Асинхронный REST API** для управления базой данных фильмов и жанров.
+- ✅ **Полный CRUD:** создание, чтение фильмов и жанров.
+- 🔗 **Связь Многие-ко-многим (Many-to-Many):** через связующую таблицу `movie_genres`.
+- 🛡️ **Строгая валидация на уровне БД:** `UNIQUE`, `CHECK` (рейтинг, год), `FOREIGN KEY` с `ON DELETE CASCADE` + включение `PRAGMA foreign_keys`.
+- ⚡ **Асинхронность:** полная работа через `aiosqlite` без блокировки Event Loop.
+- 🛠️ **Middleware:** кастомное логирование всех HTTP-запросов с замером времени выполнения.
+- 📬 **BackgroundTasks:** механизм для выполнения фоновых задач (имитация отправки уведомлений) без задержки ответа клиенту.
+- 🐛 **Graceful Degradation:** перехват `sqlite3.IntegrityError` и возврат понятных HTTP-статусов (400, 404) вместо падений сервера.
+
 ---
 
 ## 📅 План развития (помесячный, без поблажек)
@@ -96,7 +106,7 @@
 - [x] **Middleware** — написать свой для логирования запросов
 - [x] **BackgroundTasks** — встроенный механизм FastAPI для фоновых задач
 - [x] **Валидация на уровне БД** — NOT NULL, UNIQUE, CHECK, FOREIGN KEY (не полагаться только на Pydantic)
-- [ ] **Проект:** `Каталог фильмов` (REST API)
+- [x] **Проект:** `Каталог фильмов` (REST API)
   - CRUD для `Фильм` и `Жанр` (многие-ко-многим)
   - Асинхронный SQLite
   - Middleware для логирования + BackgroundTasks для отправки уведомлений
@@ -181,6 +191,7 @@
 - [x] Flask: маршруты, шаблоны, формы
 - [x] Git: коммиты, push, pull, ветки (базово)
 - [x] Telegram-бот: aiogram, команды, обработка текста
+- [x] FastAPI: асинхронные REST API, Pydantic, Middleware, BackgroundTasks
 
 ---
 
@@ -236,9 +247,14 @@ learning-journal/
 ├── finance_tracker/
 │ ├── finance_tracker.py
 │ └── README.md
+│── init_movies_db.py    # Скрипт инициализации БД с ограничениями
+│── movies_db.py         # Асинхронные функции работы с SQLite
+│── movies_api.py        # Эндпоинты FastAPI + обработка ошибок
+│── users_api.py
 ├── habit_tracker_web/ # Веб-проект
 ├── heroys_oop/ # Игра
 └── (другие проекты будут добавляться)
+
 
 ---
 
