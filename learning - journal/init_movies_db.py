@@ -16,7 +16,7 @@ async def init_db():
         await db.execute("""
             CREATE TABLE IF NOT EXISTS movies (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
+                title TEXT NOT NULL UNIQUE,
                 release_year INTEGER CHECK (release_year >= 1800),
                 rating REAL CHECK (rating >= 0.0 AND rating <= 10.0)
             )
