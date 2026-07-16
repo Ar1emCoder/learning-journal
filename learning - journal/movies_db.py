@@ -50,3 +50,38 @@ async def add_genre_to_movie(movie_id: int, genre_id: int):
         )
         await db.commit()
 
+
+async def delete_movie(movie_id: int):
+    async with aiosqlite.connect('movies.db') as db:
+        cursor = await db.execute(
+            "DELETE FROM movies WHERE id = ?",
+            (movie_id, )
+        )
+        await db.commit()
+        # возвращаем True, если удалилась хотя бы одна запись
+        return cursor.rowcount > 0
+
+
+async def get_movie_with_genres(movie_id: int):
+    async with aiosqlite.connect('movies.db') as db:
+        cursor = await db.execute("""
+            SELECT m.id, m.title, m.release_year, m.rating, g.name
+            FROM movies m
+            LEFT JOIN movie_genres mg ON m.id = mg.movie_id
+            LEFT JOIN genres g ON mg.genre_id = g.id
+            WHERE m.id = ?
+            """,
+        (movie_id, ))
+
+        rows = await cursor.fetchall()
+        if not rows:
+            return None
+        return {
+            "id": rows[0][0],
+            "title": rows[0][1],
+            "release_year": rows[0][2],
+            "rating": rows[0][3],
+            "genres": [row[4] for row in rows if row[4] is not None]
+        }
+
+
