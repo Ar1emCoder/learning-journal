@@ -52,16 +52,18 @@
 - ✅ Хранение в SQLite
 - ✅ Адаптивный интерфейс (CSS)
 
-### 6. 🎬 Movie Catalog API (FastAPI + Async SQLite)
-**Асинхронный REST API** для управления базой данных фильмов и жанров.
-- ✅ **Полный CRUD:** создание, чтение, обновление (в процессе), удаление фильмов и жанров.
-- 🔗 **Связь Многие-ко-многим (Many-to-Many):** через связующую таблицу `movie_genres` с `ON DELETE CASCADE`.
-- 🛡️ **Строгая валидация на уровне БД:** `UNIQUE`, `CHECK` (рейтинг, год), `FOREIGN KEY` + принудительное включение `PRAGMA foreign_keys`.
-- ⚡ **Асинхронность:** полная работа через `aiosqlite` без блокировки Event Loop.
-- 🛠️ **Middleware:** кастомное логирование всех HTTP-запросов с замером времени выполнения.
-- 📬 **BackgroundTasks:** механизм для выполнения фоновых задач без задержки ответа клиенту.
-- 🐛 **Graceful Degradation:** перехват `sqlite3.IntegrityError` и возврат понятных HTTP-статусов (400, 404) вместо падений сервера.
-- 🔗 **Сложные SQL-запросы:** использование `LEFT JOIN` для получения сущности со всеми связанными данными в одном запросе.
+### 6. 🎬 Movie Catalog API (FastAPI + Async SQLite + Docker)
+**Production-ready REST API** с полным CRUD и контейнеризацией.
+- ✅ **Полный CRUD:** создание, чтение (с пагинацией `LIMIT/OFFSET`), обновление (`PUT`), удаление (`DELETE` с `CASCADE`)
+- 🔗 **Связь Многие-ко-многим (Many-to-Many):** через связующую таблицу `movie_genres` с `ON DELETE CASCADE`
+- 🛡️ **Строгая валидация на уровне БД:** `UNIQUE`, `CHECK` (рейтинг, год), `FOREIGN KEY` + `PRAGMA foreign_keys = ON`
+- ⚡ **Асинхронность:** полная работа через `aiosqlite` без блокировки Event Loop
+-  **Сложные SQL-запросы:** `LEFT JOIN` для получения фильма со всеми жанрами в одном запросе
+- 🏗️ **Архитектурный рефакторинг:** Dependency Injection через `Depends(get_db)` для управления соединениями с БД
+- 🐛 **Обработка ошибок:** перехват `sqlite3.IntegrityError` → возврат HTTP 400/404 вместо падений сервера
+- 🐳 **Контейнеризация:** Dockerfile, requirements.txt, сборка и запуск в Docker-контейнере
+- 📦 **Production-ready:** приложение работает в изолированном контейнере, готово к деплою на любом сервере
+  
 ---
 
 ## 📅 План развития (помесячный, без поблажек)
@@ -107,9 +109,13 @@
 - [x] **BackgroundTasks** — встроенный механизм FastAPI для фоновых задач
 - [x] **Валидация на уровне БД** — NOT NULL, UNIQUE, CHECK, FOREIGN KEY (не полагаться только на Pydantic)
 - [x] **Проект:** `Каталог фильмов` (REST API)
-  - CRUD для `Фильм` и `Жанр` (многие-ко-многим)
-  - Асинхронный SQLite
-  - Middleware для логирования + BackgroundTasks для отправки уведомлений
+  - Полный CRUD (Create, Read с пагинацией, Update, Delete с CASCADE)
+  - Асинхронный SQLite + aiosqlite
+  - Many-to-Many связь (фильмы ↔ жанры)
+  - Middleware для логирования + BackgroundTasks
+  - Dependency Injection (`Depends`)
+  - Сложные SQL-запросы (`LEFT JOIN`)
+  - Docker-контейнеризация (Dockerfile, requirements.txt)
 
 ---
 
@@ -191,7 +197,10 @@
 - [x] Flask: маршруты, шаблоны, формы
 - [x] Git: коммиты, push, pull, ветки (базово)
 - [x] Telegram-бот: aiogram, команды, обработка текста
-- [x] FastAPI: асинхронные REST API, Pydantic, Middleware, BackgroundTasks
+- [x] FastAPI: асинхронные REST API, Pydantic, Middleware, BackgroundTasks, обработка исключений
+- [x] Dependency Injection: паттерн `Depends()` для управления соединениями с БД
+- [x] Продвинутый SQL: `JOIN` (многие-ко-многим), пагинация (`LIMIT/OFFSET`), каскадное удаление
+- [x] Docker: написание Dockerfile, сборка образов, запуск контейнеров
 
 ---
 
@@ -247,6 +256,8 @@ learning-journal/
 ├── finance_tracker/
 │ ├── finance_tracker.py
 │ └── README.md
+│── Dockerfile             # Контейнеризация приложения
+│── requirements.txt       # Зависимости Python (FastAPI, uvicorn, aiosqlite)
 │── init_movies_db.py    # Скрипт инициализации БД с ограничениями
 │── movies_db.py         # Асинхронные функции работы с SQLite
 │── movies_api.py        # Эндпоинты FastAPI + обработка ошибок
