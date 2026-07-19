@@ -1,7 +1,13 @@
 import aiosqlite
 
-async def add_genre(name: str):
-    async with aiosqlite.connect('movies.db') as db:
+async def get_db():
+    db = await aiosqlite.connect('movies.db')
+    try:
+        yield db # отдаем соединение эндпоинту
+    finally:
+        await db.close() # закрываем, когда все готово
+
+async def add_genre(db, name: str):
         cursor = await db.execute(
             "INSERT INTO genres(name) VALUES (?) ",
             (name, )
@@ -10,18 +16,17 @@ async def add_genre(name: str):
         return {"id": cursor.lastrowid, "name": name}
 
 
-async def get_all_genres():
-    async with aiosqlite.connect('movies.db') as db:
+async def get_all_genres(db, skip: int = 0, limit: int = 100):
         cursor = await db.execute(
-            "SELECT id, name FROM genres"
+            "SELECT id, name FROM genres LIMIT ? OFFSET ?", # LIMIT - сколько максимум вернуть, OFFSET - сколько пропустить с начала
+            (limit, skip)
         )
         genres = await cursor.fetchall()
         # Превращаем список кортежей в список словарей
         return [{"id": row[0], "name": row[1]} for row in genres]
 
 
-async def add_movie(title: str, release_year: int, rating: float):
-    async with aiosqlite.connect('movies.db') as db:
+async def add_movie(db, title: str, release_year: int, rating: float):
         cursor = await db.execute(
             "INSERT INTO movies (title, release_year, rating) VALUES (?, ?, ?)",
             (title, release_year, rating)
@@ -30,18 +35,17 @@ async def add_movie(title: str, release_year: int, rating: float):
         return {"id": cursor.lastrowid, "title": title, "release_year": release_year, "rating": rating}
 
 
-async def get_all_movies():
-    async with aiosqlite.connect('movies.db') as db:
+async def get_all_movies(db, skip: int = 0, limit: int = 100):
         cursor = await db.execute(
-            "SELECT id, title, release_year, rating FROM movies"
+            "SELECT id, title, release_year, rating FROM movies LIMIT ? OFFSET ?",
+            (limit, skip)
         )
         movies = await cursor.fetchall()
         return [{"id": row[0], "title": row[1], "release_year": row[2], "rating": row[3]} for row in movies]
 
 
 # Связь таблиц: жанр - фильм
-async def add_genre_to_movie(movie_id: int, genre_id: int):
-    async with aiosqlite.connect('movies.db') as db:
+async def add_genre_to_movie(db, movie_id: int, genre_id: int):
         await db.execute("PRAGMA foreign_keys = ON")
 
         cursor = await db.execute(
@@ -51,8 +55,7 @@ async def add_genre_to_movie(movie_id: int, genre_id: int):
         await db.commit()
 
 
-async def delete_movie(movie_id: int):
-    async with aiosqlite.connect('movies.db') as db:
+async def delete_movie(db, movie_id: int):
         cursor = await db.execute(
             "DELETE FROM movies WHERE id = ?",
             (movie_id, )
@@ -62,8 +65,7 @@ async def delete_movie(movie_id: int):
         return cursor.rowcount > 0
 
 
-async def get_movie_with_genres(movie_id: int):
-    async with aiosqlite.connect('movies.db') as db:
+async def get_movie_with_genres(db, movie_id: int):
         cursor = await db.execute("""
             SELECT m.id, m.title, m.release_year, m.rating, g.name
             FROM movies m
@@ -85,3 +87,10 @@ async def get_movie_with_genres(movie_id: int):
         }
 
 
+async def update_movie(db, movie_id: int, title: str, release_year: int, rating: float):
+        cursor = await db.execute(
+            "UPDATE movies SET title = ?, release_year = ?, rating = ? WHERE id = ?",
+            (title, release_year, rating, movie_id)
+        )
+        await db.commit()
+        return cursor.rowcount > 0
