@@ -1,7 +1,11 @@
 import aiosqlite
+from pathlib import Path
+
+DB_PATH = (Path(__file__).parent / "movies.db").resolve()
 
 async def get_db():
-    db = await aiosqlite.connect('movies.db')
+    print(f"🔍 get_db подключается к: {DB_PATH}")
+    db = await aiosqlite.connect(DB_PATH)
     try:
         yield db # отдаем соединение эндпоинту
     finally:
