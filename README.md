@@ -116,7 +116,9 @@
   - Dependency Injection (`Depends`)
   - Сложные SQL-запросы (`LEFT JOIN`)
   - Docker-контейнеризация (Dockerfile, requirements.txt)
-- [x] Дополнительные задания (алгоритмы, доработка проекта)
+- [x] Дополнительные задания (алгоритмы, доработка проекта):
+  - Dockerfile для FastAPI-приложения
+  - Тестирование (pytest)
 
 ---
 
