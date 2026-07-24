@@ -119,6 +119,10 @@
 - [x] Дополнительные задания (алгоритмы, доработка проекта):
   - Dockerfile для FastAPI-приложения
   - Тестирование (pytest)
+  - Теоретический разбор Docker Compose:
+      1) Чем docker-compose.yml отличается от Dockerfile
+      2) Что такое services, ports и volumes
+      3) Зачем вообще нужен Docker Compose
 
 ---
 
