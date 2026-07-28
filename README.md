@@ -123,6 +123,8 @@
       1) Чем docker-compose.yml отличается от Dockerfile
       2) Что такое services, ports и volumes
       3) Зачем вообще нужен Docker Compose
+  - Сдаю экзамены в Т-Академии (по математике и алгоритмам)
+  - Доделал пагинацию на API для movie_app и movie_db
 
 ---
 
