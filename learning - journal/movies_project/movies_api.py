@@ -2,7 +2,7 @@ import sqlite3
 
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
-from movies_db import get_db, add_genre, get_all_genres, add_movie, get_all_movies, add_genre_to_movie, delete_movie, get_movie_with_genres, update_movie
+from movies_db import get_db, add_genre, get_all_genres, add_movie, get_all_movies, add_genre_to_movie, delete_movie, get_movie_with_genres, update_movie, get_movies_by_genre, count_all_movies, count_movies_by_genre
 
 app = FastAPI(title="Каталог фильмов")
 
@@ -46,10 +46,19 @@ async def create_movie(movie: MovieCreate, db = Depends(get_db)):
 
 
 @app.get("/movies/")
-async def read_movies(skip: int = 0, limit: int = 100, db = Depends(get_db)):
-    result = await get_all_movies(db, skip, limit)
-    return result
-
+async def read_movies(skip: int = 0, limit: int = 100, genre: str = None, db = Depends(get_db)):
+    if genre:
+        result = await get_movies_by_genre(db, genre, skip, limit)
+        total = await count_movies_by_genre(db, genre)
+    else:
+        result = await  get_all_movies(db, skip, limit)
+        total = await count_all_movies(db)
+    return {
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+        "movies": result
+    }
 
 @app.post("/movies/{movie_id}/genres/{genre_id}")
 async def link_genre_to_movie(movie_id: int, genre_id: int, db = Depends(get_db)):

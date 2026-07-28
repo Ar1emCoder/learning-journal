@@ -98,3 +98,31 @@ async def update_movie(db, movie_id: int, title: str, release_year: int, rating:
         )
         await db.commit()
         return cursor.rowcount > 0
+
+async def get_movies_by_genre(db, genre: str, skip: int, limit: int):
+    cursor = await db.execute("""
+        SELECT DISTINCT m.id, m.title, m.release_year, m.rating
+        FROM movies m
+        JOIN movie_genres mg ON m.id = mg.movie_id
+        JOIN genres g ON mg.genre_id = g.id
+        WHERE g.name = ?
+        LIMIT ? OFFSET ?
+    """, (genre, limit, skip))
+    movies = await cursor.fetchall()
+    return [{"id": row[0], "title": row[1], "release_year": row[2], "rating": row[3]} for row in movies]
+
+async def count_all_movies(db):
+    cursor = await db.execute("SELECT COUNT(*) FROM movies")
+    row = await cursor.fetchone()  # ✅ fetchone вернет (count,)
+    return row[0]  # ✅ row[0] — это само число
+
+async def count_movies_by_genre(db, genre: str):
+    cursor = await db.execute("""
+        SELECT COUNT(DISTINCT m.id)
+        FROM movies m
+        JOIN movie_genres mg ON m.id = mg.movie_id
+        JOIN genres g ON mg.genre_id = g.id
+        WHERE g.name = ?
+    """, (genre,))
+    row = await cursor.fetchone()
+    return row[0]
