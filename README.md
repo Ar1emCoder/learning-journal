@@ -134,7 +134,7 @@
 **Тема:** Docker, Docker Compose, CI/CD, окружение, мониторинг
 
 - [x] Написать Dockerfile для FastAPI-приложения (multi-stage сборка)
-- [ ] Написать `docker-compose.yml` (FastAPI + PostgreSQL + Redis)
+- [x] Написать `docker-compose.yml` (FastAPI + PostgreSQL + Redis)
 - [ ] **Переменные окружения** — `.env`, `docker secrets`, безопасное хранение паролей
 - [ ] **Health checks** — настроить проверку готовности контейнеров (`/health` эндпоинт)
 - [ ] **Базовый мониторинг** — структурированные логи (JSON), простые метрики (количество запросов, ошибок)
