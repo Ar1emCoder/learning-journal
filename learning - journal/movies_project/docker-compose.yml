@@ -5,19 +5,19 @@ services:
   api:
     build: .
     ports:
-      - "8000:8000"
+      - "${APP_PORT}:${APP_PORT}"
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/movies
+      - DATABASE_URL=${DATABASE_URL}
 
   # Добавляем базу данных (второй сервис - PostgreSQL)
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: movies
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
