@@ -20,7 +20,7 @@ def clean_database():
 
 async def clean_db():
     from movies_db import get_db
-    async for db in get_db:
+    async for db in get_db():
         await db.execute("DELETE FROM movies")
         await db.commit()
 
@@ -72,7 +72,7 @@ def test_get_create_movie():
     assert response.status_code == 200
     data = response.json()
     assert "id" in data
-    assert data["title"] == "Начало"
+    assert data["title"] == unique_title
 
 def test_delete_movie():
     response = client.post("/movies/", json={
