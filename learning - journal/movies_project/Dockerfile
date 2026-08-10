@@ -3,6 +3,7 @@ FROM python:3.12
 
 # 2. Создаем папку /app внутри контейнера и делаем её рабочей
 WORKDIR /app
+RUN apt-get update && apt-get install -y curl
 
 # 3. Копируем файл зависимостей и устанавливаем их
 COPY requirements.txt .

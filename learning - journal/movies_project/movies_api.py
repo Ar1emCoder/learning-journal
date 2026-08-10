@@ -97,3 +97,8 @@ async def update_movie_endpoint(movie_id: int, movie: MovieUpdate, db = Depends(
         raise HTTPException(status_code=404, detail="Фильм не найден!")
 
     return {"message": "Фильм успешно обновлён"}
+
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
