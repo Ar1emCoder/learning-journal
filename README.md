@@ -287,4 +287,5 @@ learning-journal/
 
 *README обновляется еженедельно.*
  
+ #   T e s t   C I / C D   t r i g g e r  
  
