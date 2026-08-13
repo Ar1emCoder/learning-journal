@@ -7,7 +7,9 @@ DB_PATH = (Path(__file__).parent / "movies.db").resolve()
 
 
 async def init_db():
-    print(f"🔍 init_db создаёт таблицы в: {DB_PATH}")  # <-- ДОБАВЬ ЭТОТ PRINT ДЛЯ ОТЛАДКИ
+    print(
+        f"🔍 init_db создаёт таблицы в: {DB_PATH}"
+    )  # <-- ДОБАВЬ ЭТОТ PRINT ДЛЯ ОТЛАДКИ
     async with aiosqlite.connect(DB_PATH) as db:
         # 1. Таблица жанров
         await db.execute("""
