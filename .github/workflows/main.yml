@@ -23,6 +23,7 @@ jobs:
           cd "learning - journal/movies_project"
           pip install -r requirements.txt
           pip install pytest
+          pip install httpx
           
       - name: Run tests
         run: |
