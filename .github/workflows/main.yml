@@ -58,10 +58,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build Docker image
         uses: docker/build-push-action@v4
         with:
           context: ./learning - journal/movies_project
           file: ./learning - journal/movies_project/Dockerfile
-          push: true
-          tags: ghcr.io/ar1emcoder/movies-api:latest
+          push: false
+          tags: movies-api:latest
