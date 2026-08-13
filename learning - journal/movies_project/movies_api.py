@@ -70,7 +70,7 @@ async def get_movie(movie_id: int, db = Depends(get_db)):
     movie = await cursor.fetchone()
 
     if movie is None:
-        raise HTTPException(status_code=404, detail="Фильм не найден!)
+        raise HTTPException(status_code=404, detail="Фильм не найден!")
     return movie
 
 
