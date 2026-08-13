@@ -52,7 +52,7 @@
 - ✅ Хранение в SQLite
 - ✅ Адаптивный интерфейс (CSS)
 
-### 6. 🎬 Movie Catalog API (FastAPI + Async SQLite + Docker)
+### 6. 🎬 Movie Catalog API (FastAPI + Async SQLite + Docker) - 🌐 [API](https://movies-api-v2-sljk.onrender.com)
 **Production-ready REST API** с полным CRUD и контейнеризацией.
 - ✅ **Полный CRUD:** создание, чтение (с пагинацией `LIMIT/OFFSET`), обновление (`PUT`), удаление (`DELETE` с `CASCADE`)
 - 🔗 **Связь Многие-ко-многим (Many-to-Many):** через связующую таблицу `movie_genres` с `ON DELETE CASCADE`
