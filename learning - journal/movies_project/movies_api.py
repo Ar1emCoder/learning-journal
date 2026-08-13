@@ -60,6 +60,20 @@ async def read_movies(skip: int = 0, limit: int = 100, genre: str = None, db = D
         "movies": result
     }
 
+
+@app.get("/movies/{movie_id}")
+async def get_movie(movie_id: int, db = Depends(get_db)):
+    if movie_id <= 0:
+        raise HTTPException(status_code=400, detail="ID должен быть положительным")
+    qwery = "SELECT * FROM movies WHERE id = ?"
+    cursor = await db.execute(qwery, (movie_id, ))
+    movie = await cursor.fetchone()
+
+    if movie is None:
+        raise HTTPException(status_code=404, detail="Movie not found")
+    return movie
+
+
 @app.post("/movies/{movie_id}/genres/{genre_id}")
 async def link_genre_to_movie(movie_id: int, genre_id: int, db = Depends(get_db)):
     try:
