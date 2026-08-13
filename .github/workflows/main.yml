@@ -20,11 +20,11 @@ jobs:
           
       - name: Install dependencies
         run: |
-          cd learning-journal/movies_project
+          cd learning - journal/movies_project
           pip install -r requirements.txt
           pip install pytest
           
       - name: Run tests
         run: |
-          cd learning-journal/movies_project
+          cd learning - journal/movies_project
           pytest tests/test_movies.py -v
