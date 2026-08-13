@@ -64,4 +64,4 @@ jobs:
           context: ./learning - journal/movies_project
           file: ./learning - journal/movies_project/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/movies-api:${{ github.sha }}
+          tags: ghcr.io/ar1emcoder/movies-api:latest
