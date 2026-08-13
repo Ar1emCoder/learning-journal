@@ -2,3 +2,5 @@ fastapi
 uvicorn
 aiosqlite
 pydantic
+flake8
+black
