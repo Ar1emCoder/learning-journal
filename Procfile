@@ -1,0 +1,1 @@
+web: cd learning-journal/movies_project && uvicorn movies_api:app --host 0.0.0.0 --port $PORT
