@@ -49,9 +49,10 @@
 #     add_transaction(99, 1, -100.0, 'expense')  # Должно выдать ошибку
 #     print("Баланс пользователя 1: ", get_user_balance(1))
 
-#--------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
 
 import sqlite3
+from logger_finance import logger
 
 
 def get_connection():
@@ -59,7 +60,7 @@ def get_connection():
     Вспомогательная функция для подключения к базе данных.
     Включает поддержку внешних ключей (foreign keys).
     """
-    conn = sqlite3.connect('finance_tracker.db')
+    conn = sqlite3.connect("finance_tracker.db")
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
@@ -73,12 +74,14 @@ def show_all_transactions():
     cursor = conn.cursor()
 
     # JOIN соединяет таблицы по внешним ключам
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT t.amount, t.type, u.username, c.name
         FROM transactions t
         JOIN users u ON t.user_id = u.id
         JOIN categories c ON t.category_id = c.id
-    """)
+    """
+    )
 
     # Получаем все строки результата
     results = cursor.fetchall()
@@ -86,7 +89,9 @@ def show_all_transactions():
     # Выводим каждую транзакцию
     for row in results:
         amount, type_, username, category = row
-        print(f"Транзакция: {amount} руб., тип: {type_}, пользователь: {username}, категория: {category}")
+        logger.info(
+            f"Транзакция: {amount} руб., тип: {type_}, пользователь: {username}, категория: {category}"
+        )
 
     conn.close()
 
@@ -101,27 +106,29 @@ def add_transaction(user_id, category_id, amount, type):
     # ШАГ 1: Проверяем, существует ли пользователь
     cursor.execute("SELECT id FROM users WHERE id = ?", (user_id,))
     if cursor.fetchone() is None:
-        print(f"❌ Ошибка: пользователь с id={user_id} не найден")
+        logger.error(f"❌ Ошибка: пользователь с id={user_id} не найден")
         conn.close()
         return  # Выходим из функции, дальше не выполняем
 
     # ШАГ 2: Проверяем, существует ли категория
     cursor.execute("SELECT id FROM categories WHERE id = ?", (category_id,))
     if cursor.fetchone() is None:
-        print(f"❌ Ошибка: категория с id={category_id} не найдена")
+        logger.error(f"❌ Ошибка: категория с id={category_id} не найдена")
         conn.close()
         return
 
     # ШАГ 3: Вставляем транзакцию (только если обе проверки прошли)
     cursor.execute(
         "INSERT INTO transactions (user_id, category_id, amount, type) VALUES (?, ?, ?, ?)",
-        (user_id, category_id, amount, type)
+        (user_id, category_id, amount, type),
     )
 
     # ВАЖНО: сохраняем изменения!
     conn.commit()
 
-    print(f"✅ Транзакция добавлена: пользователь {user_id}, категория {category_id}, сумма {amount}, тип {type}")
+    logger.info(
+        f"✅ Транзакция добавлена: пользователь {user_id}, категория {category_id}, сумма {amount}, тип {type}"
+    )
     conn.close()
 
 
@@ -136,8 +143,7 @@ def get_user_balance(user_id):
     # SUM(amount) сложит все транзакции.
     # Если expense хранится как отрицательное число (-500), то баланс посчитается правильно.
     cursor.execute(
-        "SELECT SUM(amount) as balance FROM transactions WHERE user_id = ?",
-        (user_id,)
+        "SELECT SUM(amount) as balance FROM transactions WHERE user_id = ?", (user_id,)
     )
 
     # fetchone() возвращает одну строку (кортеж) или None
@@ -164,8 +170,10 @@ if __name__ == "__main__":
     print("\n" + "=" * 50)
     print("➕ ДОБАВЛЕНИЕ ТРАНЗАКЦИЙ")
     print("=" * 50)
-    add_transaction(1, 2, -200.0, 'expense')   # Должно сработать
-    add_transaction(99, 1, -100.0, 'expense')  # Должно выдать ошибку (нет пользователя 99)
+    add_transaction(1, 2, -200.0, "expense")  # Должно сработать
+    add_transaction(
+        99, 1, -100.0, "expense"
+    )  # Должно выдать ошибку (нет пользователя 99)
 
     print("\n" + "=" * 50)
     print("💰 БАЛАНС ПОЛЬЗОВАТЕЛЕЙ")
