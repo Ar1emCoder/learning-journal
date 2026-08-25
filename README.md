@@ -44,7 +44,7 @@
 - 💾 Полное сохранение и загрузка данных в JSON (с поддержкой `datetime`).
 - 🆔 Автоматическая генерация уникальных ID.
 
-### 5. 🏃 Habit Tracker (Веб + SQLite) — [Сайт](https://learning-journal-tau.vercel.app/)
+### 5. 🏃 Habit Tracker (Веб + SQLite) — [[Сайт](https://learning-journal-tau.vercel.app/)](https://habit-tracker-theta-inky.vercel.app/)
 Полноценное веб-приложение на Flask.
 - ✅ Добавление, выполнение, удаление привычек
 - ✅ Умный streak (учитывает пропуски)
