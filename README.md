@@ -44,7 +44,7 @@
 - 💾 Полное сохранение и загрузка данных в JSON (с поддержкой `datetime`).
 - 🆔 Автоматическая генерация уникальных ID.
 
-### 5. 🏃 Habit Tracker (Веб + SQLite) — [Сайт](https://learning-journal-tau.vercel.app/)
+### 5. 🏃 **Habit Tracker (Веб + SQLite)** — [Сайт](https://habit-tracker-theta-inky.vercel.app/)
 Полноценное веб-приложение на Flask.
 - ✅ Добавление, выполнение, удаление привычек
 - ✅ Умный streak (учитывает пропуски)
@@ -287,3 +287,29 @@ learning-journal/
 - **Девиз:** Код каждый день. Даже маленький шаг — это прогресс.
 
 *README обновляется еженедельно.* 
+
+-------------------------------------------------------------------------------------
+
+### 20 августа — 1 сентября 2026 (спринт-фундамент)
+
+**Алгоритмы:** связные списки, рекурсия, backtracking, деревья (обходы DFS/BFS), 
+BST (search/insert/delete — с нуля, без подсказок). Ежедневная практика на LeetCode, 
+регистрация на Яндекс.Тренировки и kiroplatform.ru.
+
+**Инфраструктура:**
+- Разбивка `learning-journal` на отдельные репозитории (movie-catalog-api, 
+  habit-tracker, finance-tracker, notes-app, python-basics, foodhelper-bot).
+- Настройка `ruff` + `black` + pre-commit во всех проектах.
+- Переход с `print` на модуль `logging`.
+- **Movie Catalog API: полная миграция с SQLite на PostgreSQL** 
+  (asyncpg, connection pool, Dependency Injection через `Depends(get_db)`, 
+  healthcheck в docker-compose для корректного порядка запуска сервисов).
+- Устранены security-issues: `.env` убран из репозиториев, настроен `.gitignore`.
+
+**Git:** освоены ветки, merge, rebase (тренажёр learngitbranching.js.org + 
+практика на реальном репозитории).
+
+**Итог спринта:** из 14 слабых мест самооценки (1-2/5) закрыты или сильно 
+подтянуты — связные списки, рекурсия, деревья, BST, PostgreSQL, git-flow, 
+логирование. Backtracking и Big O — в процессе, добавлены в регулярную 
+воскресную ротацию повторения.
