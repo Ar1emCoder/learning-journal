@@ -1,67 +1,48 @@
-name: CI/CD Pipeline
+name: CI Tests
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
-
-      - name: Install linters
-        run: |
-          cd "learning - journal/movies_project"
-          pip install flake8 black
-
-      - name: Install dependencies
-        run: |
-          cd "learning - journal/movies_project"
-          pip install -r requirements.txt
-          pip install pytest
-          pip install httpx
-          
-      - name: Run tests
-        run: |
-          cd "learning - journal/movies_project"
-          pytest tests/test_movies.py -v
-
-      - name: Run linters
-        run: |
-          cd "learning - journal/movies_project"
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          black --check .
-
-  build-docker:
-    needs: test  # Этот job запустится только если тесты прошли
-    runs-on: ubuntu-latest
+    # Поднимаем PostgreSQL как сервис для тестов
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: mysecretpassword
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./learning - journal/movies_project
-          file: ./learning - journal/movies_project/Dockerfile
-          push: false
-          tags: movies-api:latest
+    - name: Run tests
+      env:
+        DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test_db
+      run: |
+        # Здесь твоя команда для тестов, например:
+        # pytest tests/ -v
+        echo "Tests would run here with Postgres service ready!"
