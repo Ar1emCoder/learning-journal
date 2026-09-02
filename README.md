@@ -143,7 +143,7 @@
   - Заменить SQLite на PostgreSQL
   - Полный CI/CD: тесты → сборка образа → деплой на Railway/Render (push в main)
   - Health check и мониторинг логов
-- [ ] Курс на Stepik
+- [x] Курс на Stepik
 
 ---
 
