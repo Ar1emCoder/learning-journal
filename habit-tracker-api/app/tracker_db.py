@@ -1,6 +1,27 @@
 from dotenv import load_dotenv
+import asyncpg
+import os
 
 load_dotenv()
+
+_db_pool = None
+
+
+async def init_db():
+    global _db_pool
+    db_url = os.getenv("DATABASE_URL")
+    _db_pool = await asyncpg.create_pool(db_url)
+
+
+async def close_poll():
+    global _db_pool
+    if _db_pool:
+        await _db_pool.close()
+
+
+async def get_db():
+    async with _db_pool.acquire() as conn:
+        yield conn
 
 
 async def add_habit(db, name):
