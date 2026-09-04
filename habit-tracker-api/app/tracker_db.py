@@ -7,13 +7,13 @@ load_dotenv()
 _db_pool = None
 
 
-async def init_db():
+async def init_pool():
     global _db_pool
     db_url = os.getenv("DATABASE_URL")
     _db_pool = await asyncpg.create_pool(db_url)
 
 
-async def close_poll():
+async def close_pool():
     global _db_pool
     if _db_pool:
         await _db_pool.close()
@@ -54,3 +54,14 @@ async def delete_habit(db, habit_id: int):
         return None
     else:
         return f"Привычка с ID: {row['id']} удалена!"
+
+
+async def mark_habit_complete(db, habit_id: int):
+    try:
+        row = await db.fetchrow(
+            "INSERT INTO habit_completions (habit_id, created_at) VALUES ($1, NOW()) RETURNING habit_id, created_at",
+            habit_id,
+        )
+        return {"habit_id": row["habit_id"], "created_at": row["created_at"]}
+    except asyncpg.exceptions.UniqueViolationError:
+        return None
