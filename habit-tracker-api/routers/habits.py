@@ -9,6 +9,7 @@ from app.tracker_db import (
     close_pool,
     get_db,
     mark_habit_complete,
+    get_habit_streak,
 )
 
 
@@ -64,3 +65,9 @@ async def completed_habit(habit_id: int, db=Depends(get_db)):
         raise HTTPException(status_code=409, detail="Уже отмечено на сегодня!")
     else:
         return {"message": "Выполнено!", "data": result}
+
+
+@app.get("/habits/{habit_id}/streak")
+async def get_streak(habit_id: int, db=Depends(get_db)):
+    streak = await get_habit_streak(db, habit_id)
+    return {"habit_id": habit_id, "curr_streak": streak}

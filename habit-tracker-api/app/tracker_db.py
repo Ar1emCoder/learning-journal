@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import asyncpg
 import os
+from datetime import timedelta
 
 load_dotenv()
 
@@ -65,3 +66,24 @@ async def mark_habit_complete(db, habit_id: int):
         return {"habit_id": row["habit_id"], "created_at": row["created_at"]}
     except asyncpg.exceptions.UniqueViolationError:
         return None
+
+
+async def get_habit_streak(db, habit_id: int):
+    rows = await db.fetch(
+        "SELECT DISTINCT created_at::date AS created_at FROM habit_completions WHERE habit_id = $1 ORDER BY created_at DESC",
+        habit_id,
+    )
+    if not rows:
+        return 0
+
+    streak = 0
+    expected_date = rows[0]["created_at"]
+
+    for row in rows:
+        curr_date = row["created_at"]
+        if curr_date == expected_date:
+            streak += 1
+            expected_date = curr_date - timedelta(days=1)
+        else:
+            break
+    return streak
