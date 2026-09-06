@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import asyncpg
 import os
-from datetime import timedelta
+from datetime import timedelta, date
 
 load_dotenv()
 
@@ -74,6 +74,10 @@ async def get_habit_streak(db, habit_id: int):
         habit_id,
     )
     if not rows:
+        return 0
+
+    yesterday = date.today() - timedelta(days=1)
+    if rows[0]["streak"] != date.today() and rows[0]["streak"] != yesterday:
         return 0
 
     streak = 0
