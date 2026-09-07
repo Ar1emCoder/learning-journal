@@ -77,7 +77,7 @@ async def get_habit_streak(db, habit_id: int):
         return 0
 
     yesterday = date.today() - timedelta(days=1)
-    if rows[0]["streak"] != date.today() and rows[0]["streak"] != yesterday:
+    if rows[0]["created_at"] != date.today() and rows[0]["created_at"] != yesterday:
         return 0
 
     streak = 0
@@ -91,3 +91,11 @@ async def get_habit_streak(db, habit_id: int):
         else:
             break
     return streak
+
+
+async def get_habit_stats(db):
+    total_habits = await db.fetchval("SELECT COUNT(*) FROM habits")
+    completed_today = await db.fetchval(
+        "SELECT COUNT(*) FROM habit_completions WHERE created_at::date = CURRENT_DATE"
+    )
+    return {"total_habits": total_habits, "completed_today": completed_today}

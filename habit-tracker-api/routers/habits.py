@@ -10,6 +10,7 @@ from app.tracker_db import (
     get_db,
     mark_habit_complete,
     get_habit_streak,
+    get_habit_stats,
 )
 
 
@@ -71,3 +72,8 @@ async def completed_habit(habit_id: int, db=Depends(get_db)):
 async def get_streak(habit_id: int, db=Depends(get_db)):
     streak = await get_habit_streak(db, habit_id)
     return {"habit_id": habit_id, "curr_streak": streak}
+
+
+@app.get("/habits/stats")
+async def get_stats(db=Depends(get_db)):
+    return await get_habit_stats(db)
