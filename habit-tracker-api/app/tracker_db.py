@@ -68,29 +68,38 @@ async def mark_habit_complete(db, habit_id: int):
         return None
 
 
-async def get_habit_streak(db, habit_id: int):
-    rows = await db.fetch(
-        "SELECT DISTINCT created_at::date AS created_at FROM habit_completions WHERE habit_id = $1 ORDER BY created_at DESC",
-        habit_id,
-    )
-    if not rows:
+def calculate_streak(dates: list[date]) -> int:
+    if not dates:
         return 0
 
-    yesterday = date.today() - timedelta(days=1)
-    if rows[0]["created_at"] != date.today() and rows[0]["created_at"] != yesterday:
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    if dates[0] != today and dates[0] != yesterday:
         return 0
-
     streak = 0
-    expected_date = rows[0]["created_at"]
+    expected_date = dates[0]  # ожидаемая дата
 
-    for row in rows:
-        curr_date = row["created_at"]
+    for curr_date in dates:
         if curr_date == expected_date:
             streak += 1
             expected_date = curr_date - timedelta(days=1)
         else:
             break
     return streak
+
+
+async def get_habit_streak(db, habit_id: int):
+    rows = await db.fetch(
+        """
+        SELECT DISTINCT created_at::date AS created_at
+        FROM habit_completions
+        WHERE habit_id = $1
+        ORDER BY created_at DESC
+        """,
+        habit_id,
+    )
+    dates = [row["created_at"] for row in rows]
+    return calculate_streak(dates)
 
 
 async def get_habit_stats(db):
