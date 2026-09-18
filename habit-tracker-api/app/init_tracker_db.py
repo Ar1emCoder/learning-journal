@@ -1,4 +1,4 @@
-import asyncpg
+import asyncpg  # type: ignore
 import os
 import asyncio
 from dotenv import load_dotenv
@@ -25,6 +25,14 @@ async def init_db():
             habit_id INTEGER,
             created_at TIMESTAMP DEFAULT NOW(),
             FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE);
+        """
+    )
+
+    await conn.execute(
+        """CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR UNIQUE,
+            hashed_password VARCHAR);
         """
     )
 

@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-import asyncpg
+import asyncpg  # type: ignore
 import os
 from datetime import timedelta, date
 
@@ -108,3 +108,26 @@ async def get_habit_stats(db):
         "SELECT COUNT(*) FROM habit_completions WHERE created_at::date = CURRENT_DATE"
     )
     return {"total_habits": total_habits, "completed_today": completed_today}
+
+
+async def create_user(db, username: str, hashed_password: str):
+    # Создаем нового пользователя в БД
+    try:
+        row = await db.fetchrow(
+            "INSERT INTO users (username, hashed_password) VALUES ($1, $2) RETURNING id, username",
+            username, hashed_password
+        )
+        return {"id": row["id"], "username": row["username"]}
+    except asyncpg.exceptions.UniqueViolationError:
+        return None # если такой уже есть пользователь
+
+
+async def get_user_by_username(db, username: str):
+    # Поиск пользователя по имени для проверки пароля
+    row = await db.fetchrow(
+        "SELECT id, username, hashed_password FROM users WHERE username = $1",
+        username
+    )
+    if row:
+        return dict(row)
+    return None
