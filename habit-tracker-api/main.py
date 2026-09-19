@@ -1,19 +1,37 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from app import habits
 from app.tracker_db import init_pool, close_pool
-from app.init_tracker_db import init_db
+from pathlib import Path
 
-# 1. Создаем главное приложение
-app = FastAPI(title="Habit Tracker API")
+app = FastAPI(title="HabitTracker by Artem")
 
-# 2. Подключаем роутер из habits.py
+# CORS для всех источников (можно ограничить позже)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(habits.router)
 
-# 3. События запуска и остановки переносим сюда
+frontend_path = Path(__file__).parent / "frontend"
+app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+
+
+@app.get("/")
+async def root():
+    return FileResponse(frontend_path / "index.html")
+
+
 @app.on_event("startup")
 async def startup():
     await init_pool()
-    await init_db()
+
 
 @app.on_event("shutdown")
 async def shutdown():
